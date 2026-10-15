@@ -14,171 +14,8 @@ OUTPUT = ROOT / "sources" / "vector_paths.json"
 WIDTH = 12
 HEIGHT = 22
 
-# A purpose-built geometric monospace drawing, expressed as editable
-# centerlines on Gallant's 12 by 22 coordinate system. Curves are deliberate
-# B\u00e9ziers rather than softened bitmap corners. The baseline sits at y=16,
-# capitals rise to y=3, the x-height line is y=7, and descenders reach y=20.
-#
-# A value is either a single SVG path string stroked at the default width, or
-# a list of (path, stroke-width multiplier) pairs for glyphs that mix weights.
-MODERN_PATHS = {
-    0: "M2 3 H10 V16 H2 Z",
-    ord("!"): "M6 3 V12 M6 15 V16",
-    ord('"'): "M4 3 V7 M8 3 V7",
-    ord("#"): "M4 3 L3 16 M9 3 L8 16 M2 8 H10 M2 12 H10",
-    ord("$"): "M9.5 5 C8.7 3.7 7.5 3 5.7 3 C3.5 3 2.2 4.2 2.2 6 C2.2 8 3.5 9 6 9.5 C8.7 10 10 11 10 13 C10 15 8.4 16 6 16 C4 16 2.7 15.4 1.8 14 M6 1.5 V17.5",
-    ord("%"): "M2 16 L10 3 M3.2 3 C1.7 3 1.4 5.7 3.2 5.7 C5 5.7 4.7 3 3.2 3 M8.8 13.3 C7.3 13.3 7 16 8.8 16 C10.6 16 10.3 13.3 8.8 13.3",
-    ord("&"): "M10 16 L4.2 9.3 C2.8 7.8 2 6.8 2 5.5 C2 3.8 3.3 3 5.2 3 C7.2 3 8.4 4 8.4 5.7 C8.4 7.2 7.3 8.4 4.7 10 C2.7 11.2 2 12.2 2 13.5 C2 15.2 3.3 16 5.3 16 C7.7 16 9.1 14.2 10 12",
-    ord("'"): "M6 3 V7",
-    ord("("): "M8 2 C5.5 5 4.5 8.2 4.5 11 C4.5 14 5.5 17 8 20",
-    ord(")"): "M4 2 C6.5 5 7.5 8.2 7.5 11 C7.5 14 6.5 17 4 20",
-    ord("*"): "M6 4 V10 M3.4 5.5 L8.6 8.5 M8.6 5.5 L3.4 8.5",
-    ord("+"): "M6 6 V14 M2 10 H10",
-    ord(","): "M6.5 15 L5.3 18",
-    ord("-"): "M3 11 H9",
-    ord("."): "M6 15 V16",
-    ord("/"): "M2 18 L10 1",
-    ord(":"): "M6 8 V9 M6 15 V16",
-    ord(";"): "M6 8 V9 M6.5 15 L5.3 18",
-    ord("<"): "M9 6 L3 11 L9 16",
-    ord("="): "M2 8 H10 M2 13 H10",
-    ord(">"): "M3 6 L9 11 L3 16",
-    ord("?"): "M2.5 5 C3.3 3.7 4.5 3 6.2 3 C8.6 3 10 4.2 10 6 C10 7.8 9 8.7 7.4 9.7 C6.4 10.3 6 11 6 12 M6 15 V16",
-    ord("@"): "M9 15.3 C8 15.8 7 16 5.7 16 C3 16 1.8 14.1 1.8 10.2 C1.8 6 3.4 3.7 6.4 3.7 C9.1 3.7 10.3 5.5 10.3 8.5 V13 H8 V11.5 C7.5 12.7 6.6 13.2 5.6 13.2 C4 13.2 3.2 12 3.2 10 C3.2 7.7 4.3 6.5 5.9 6.5 C7.3 6.5 8 7.4 8 9 V11.5 C8 12.7 8.8 13.2 10.3 13",
-    ord("["): "M8 2 H4 V20 H8",
-    ord("\\"): "M2 1 L10 18",
-    ord("]"): "M4 2 H8 V20 H4",
-    ord("^"): "M3 8 L6 3 L9 8",
-    ord("_"): "M2 19 H10",
-    ord("`"): "M5 2 L7 4",
-    ord("{"): "M8 2 H7 C5.5 2 5 3 5 4.5 V8.5 C5 10 4.3 11 3 11 C4.3 11 5 12 5 13.5 V17.5 C5 19 5.5 20 7 20 H8",
-    ord("|"): "M6 1 V20",
-    ord("}"): "M4 2 H5 C6.5 2 7 3 7 4.5 V8.5 C7 10 7.7 11 9 11 C7.7 11 7 12 7 13.5 V17.5 C7 19 6.5 20 5 20 H4",
-    ord("~"): "M2 11 C3 9.5 4.2 9.3 5.5 10.3 C7 11.5 8.2 11.3 10 9.5",
-    ord("0"): "M6 3 C3.9 3 2.9 5 2.9 9.5 C2.9 14 3.9 16 6 16 C8.1 16 9.1 14 9.1 9.5 C9.1 5 8.1 3 6 3",
-    ord("1"): "M3.5 6 L6 3 V16 M3 16 H9",
-    ord("2"): "M2.2 5 C3.2 3.6 4.4 3 6.2 3 C8.6 3 10 4.3 10 6.2 C10 8 9.1 9.2 7.2 10.6 L2 16 H10",
-    ord("3"): "M2.4 4.5 C3.4 3.5 4.6 3 6.2 3 C8.5 3 9.8 4.1 9.8 6 C9.8 8.1 8.4 9.3 6 9.3 H4.8 M6 9.3 C8.7 9.3 10 10.5 10 12.7 C10 14.8 8.5 16 6.1 16 C4.3 16 3 15.4 2 14.2",
-    ord("4"): "M8 16 V3 L2 12 H10",
-    ord("5"): "M9.5 3 H3 L2.5 9 H6.2 C8.7 9 10 10.2 10 12.5 C10 14.8 8.5 16 6 16 C4.2 16 2.8 15.4 2 14.3",
-    ord("6"): "M9.5 4 C8.7 3.3 7.6 3 6.3 3 C3.4 3 2 5.2 2 9.7 V12.3 C2 14.7 3.5 16 6 16 C8.5 16 10 14.6 10 12.3 C10 10 8.6 8.7 6.1 8.7 C4 8.7 2.7 9.7 2.4 10.3",
-    ord("7"): "M2 3 H10 L4.5 16",
-    ord("8"): "M6 3 C3.5 3 2.3 4.1 2.3 6.2 C2.3 8.2 3.7 9.3 6 9.3 C8.3 9.3 9.7 8.2 9.7 6.2 C9.7 4.1 8.5 3 6 3 M6 9.3 C3.3 9.3 2 10.5 2 12.7 C2 14.9 3.4 16 6 16 C8.6 16 10 14.9 10 12.7 C10 10.5 8.7 9.3 6 9.3",
-    ord("9"): "M2.5 15 C3.3 15.7 4.4 16 5.7 16 C8.6 16 10 13.8 10 9.3 V6.7 C10 4.3 8.5 3 6 3 C3.5 3 2 4.4 2 6.7 C2 9 3.4 10.3 5.9 10.3 C8 10.3 9.3 9.3 9.6 8.7",
-    ord("A"): "M1.8 16 L5.4 3 H6.6 L10.2 16 M3.2 11 H8.8",
-    ord("B"): "M2 16 V3 H6 C8.7 3 10 4.1 10 6.2 C10 8.2 8.7 9.4 6 9.4 H2 M6 9.4 C8.8 9.4 10.2 10.6 10.2 12.7 C10.2 14.9 8.8 16 6 16 H2",
-    ord("C"): "M10 5 C9 3.6 7.7 3 6 3 C3.2 3 2 5.1 2 9.5 C2 13.9 3.2 16 6 16 C7.7 16 9 15.4 10 14",
-    ord("D"): "M2 16 V3 H5.6 C8.7 3 10 5.1 10 9.5 C10 13.9 8.7 16 5.6 16 H2",
-    ord("E"): "M10 3 H2 V16 H10 M2 9.3 H8.5",
-    ord("F"): "M10 3 H2 V16 M2 9.3 H8.5",
-    ord("G"): "M10 5 C9 3.6 7.7 3 6 3 C3.2 3 2 5.1 2 9.5 C2 13.9 3.2 16 6 16 C7.7 16 9 15.4 10 14 V10 H6.7",
-    ord("H"): "M2 3 V16 M10 3 V16 M2 9.5 H10",
-    ord("I"): "M3 3 H9 M6 3 V16 M3 16 H9",
-    ord("J"): "M3 3 H10 V12.3 C10 14.8 8.6 16 6.2 16 C4.1 16 2.8 15.1 2 13.5",
-    ord("K"): "M2 3 V16 M10 3 L2.6 10.4 M5.6 9 L10 16",
-    ord("L"): "M2 3 V16 H10",
-    ord("M"): "M1.5 16 V3 L6 10.2 L10.5 3 V16",
-    ord("N"): "M2 16 V3 H3 L9 16 H10 V3",
-    ord("O"): "M6 3 C3.2 3 2 5.1 2 9.5 C2 13.9 3.2 16 6 16 C8.8 16 10 13.9 10 9.5 C10 5.1 8.8 3 6 3",
-    ord("P"): "M2 16 V3 H6 C8.7 3 10 4.3 10 6.7 C10 9 8.7 10.2 6 10.2 H2",
-    ord("Q"): "M6 3 C3.2 3 2 5.1 2 9.5 C2 13.9 3.2 16 6 16 C8.8 16 10 13.9 10 9.5 C10 5.1 8.8 3 6 3 M5.6 16.1 C4.3 16.4 3.2 17 2.8 17.8 C2.55 18.35 3 18.5 3.7 18.15 C4.7 17.65 5.7 17.75 6.7 18.5 C7.9 19.4 9.3 19.2 10.4 18",
-    ord("R"): "M2 16 V3 H6 C8.7 3 10 4.3 10 6.7 C10 9 8.7 10.2 6 10.2 H2 M6.7 10.9 L10.2 16",
-    ord("S"): "M9.7 4.7 C8.8 3.6 7.6 3 5.8 3 C3.4 3 2.1 4.2 2.1 6 C2.1 8.1 3.5 9.1 6.1 9.6 C8.8 10.1 10 11.1 10 13 C10 15 8.4 16 6 16 C4 16 2.7 15.4 1.8 14",
-    ord("T"): "M1.5 3 H10.5 M6 3 V16",
-    ord("U"): "M2 3 V12 C2 14.7 3.4 16 6 16 C8.6 16 10 14.7 10 12 V3",
-    ord("V"): "M1.8 3 L5.4 16 H6.6 L10.2 3",
-    ord("W"): "M1.2 3 L3.2 16 H4.3 L6 8.5 L7.7 16 H8.8 L10.8 3",
-    ord("X"): "M2 3 L10 16 M10 3 L2 16",
-    ord("Y"): "M1.8 3 L6 9.8 L10.2 3 M6 9.8 V16",
-    ord("Z"): "M2 3 H10 L2 16 H10",
-    ord("a"): "M9.5 16 V10 C9.5 8 8.2 7 6 7 C4.2 7 3 7.6 2.2 8.7 M9.5 11 H5 C3 11 2 12 2 13.5 C2 15.1 3.2 16 5.1 16 C7.3 16 8.8 14.8 9.2 13.8",
-    ord("b"): "M2 3 V16 M2.3 9.2 C2.7 8 4 7 6 7 C8.6 7 10 8.6 10 11.5 C10 14.4 8.6 16 6 16 C4 16 2.7 15 2.3 13.8",
-    ord("c"): "M9.5 8.5 C8.7 7.5 7.6 7 6 7 C3.3 7 2 8.7 2 11.5 C2 14.3 3.3 16 6 16 C7.6 16 8.7 15.5 9.5 14.5",
-    ord("d"): "M10 3 V16 M9.7 9.2 C9.3 8 8 7 6 7 C3.4 7 2 8.6 2 11.5 C2 14.4 3.4 16 6 16 C8 16 9.3 15 9.7 13.8",
-    ord("e"): "M2 11.5 H10 C10 8.6 8.5 7 6 7 C3.3 7 2 8.7 2 11.5 C2 14.3 3.4 16 6.2 16 C7.8 16 9 15.5 9.8 14.5",
-    ord("f"): "M3.5 7 H9 M5 16 V6 C5 4 6.1 3 8 3 C8.7 3 9.3 3.1 10 3.5",
-    ord("g"): [
-        ("M5.6 6.9 C3.5 6.9 2.4 7.9 2.4 9.5 C2.4 11.1 3.5 12.1 5.6 12.1 C7.7 12.1 8.8 11.1 8.8 9.5 C8.8 7.9 7.7 6.9 5.6 6.9", 1.0),
-        ("M8.6 7.3 C9.3 7.2 9.9 6.9 10.4 6.4", 0.8),
-        ("M4.6 12.15 C3 12.4 2.2 13.3 2.2 14.4 C2.2 15.1 3 15.6 4.5 15.85", 1.0),
-        ("M6 15.9 C8.4 15.9 10.3 16.8 10.3 18 C10.3 19.2 8.4 20.1 6 20.1 C3.6 20.1 1.7 19.2 1.7 18 C1.7 16.8 3.6 15.9 6 15.9", 1.0),
-    ],
-    ord("h"): "M2 3 V16 M2.3 9.2 C2.8 8 4.2 7 6.2 7 C8.7 7 10 8.3 10 10.8 V16",
-    ord("i"): "M6 7 V16 M6 3 V4",
-    ord("j"): "M7 7 V17 C7 19 6 20 4.2 20 C3.4 20 2.7 19.8 2 19.4 M7 3 V4",
-    ord("k"): "M2 3 V16 M9.5 7 L2.6 12.5 M5.8 11 L10 16",
-    ord("l"): "M4 3 H6 V13.5 C6 15.2 6.8 16 8.5 16 H10",
-    ord("m"): "M1.4 16 V7 M1.7 8.8 C2 7.8 3 7 4.2 7 C5.4 7 6 8 6 9.7 V16 M6.3 8.8 C6.6 7.8 7.6 7 8.8 7 C10 7 10.6 8 10.6 9.7 V16",
-    ord("n"): "M2 16 V7 M2.3 9.2 C2.8 8 4.2 7 6.2 7 C8.7 7 10 8.3 10 10.8 V16",
-    ord("o"): "M6 7 C3.3 7 2 8.7 2 11.5 C2 14.3 3.3 16 6 16 C8.7 16 10 14.3 10 11.5 C10 8.7 8.7 7 6 7",
-    ord("p"): "M2 20 V7 M2.3 9.2 C2.7 8 4 7 6 7 C8.6 7 10 8.6 10 11.5 C10 14.4 8.6 16 6 16 C4 16 2.7 15 2.3 13.8",
-    ord("q"): "M10 20 V7 M9.7 9.2 C9.3 8 8 7 6 7 C3.4 7 2 8.6 2 11.5 C2 14.4 3.4 16 6 16 C8 16 9.3 15 9.7 13.8",
-    ord("r"): "M2 16 V7 M2.3 9.2 C2.8 8 4.1 7 6 7 C7.4 7 8.5 7.4 9.3 8.3",
-    ord("s"): "M9.4 8.3 C8.6 7.4 7.4 7 5.8 7 C3.6 7 2.4 7.9 2.4 9.2 C2.4 10.7 3.6 11.2 6.1 11.7 C8.7 12.2 9.8 12.8 9.8 14.1 C9.8 15.4 8.5 16 6.2 16 C4.4 16 3.1 15.6 2.2 14.7",
-    ord("t"): "M3 7 H10 M6 3 V13.5 C6 15.2 6.8 16 8.5 16 H10",
-    ord("u"): "M2 7 V12.2 C2 14.7 3.3 16 5.8 16 C7.8 16 9.2 15 9.7 13.8 M10 16 V7",
-    ord("v"): "M2 7 L5.5 16 H6.5 L10 7",
-    ord("w"): "M1.2 7 L3.2 16 H4.2 L6 10 L7.8 16 H8.8 L10.8 7",
-    ord("x"): "M2.3 7 L9.7 16 M9.7 7 L2.3 16",
-    ord("y"): "M2 7 L5.5 16 H6.3 M10 7 L6.15 16.9 C5.5 18.6 4.1 20 2 20",
-    ord("z"): "M2 7 H10 L2 16 H10",
-    # Latin-1 punctuation and symbols, drawn in the same geometric system.
-    0xA1: "M6 16 V7 M6 3 V4",
-    0xA2: "M9.4 8.6 C8.6 7.6 7.6 7.1 6.1 7.1 C3.5 7.1 2.2 8.6 2.2 11.5 C2.2 14.4 3.5 15.9 6.1 15.9 C7.6 15.9 8.6 15.4 9.4 14.4 M6 4.8 V7.1 M6 15.9 V18.2",
-    0xA3: "M9.2 4.4 C8.5 3.5 7.5 3 6.3 3 C4.6 3 3.6 4.2 3.6 6.1 V13.2 C3.6 14.6 3.1 15.5 2.2 16 H10 M2.2 9.5 H7.4",
-    0xA4: "M6 6.9 C4.1 6.9 2.9 8.1 2.9 10 C2.9 11.9 4.1 13.1 6 13.1 C7.9 13.1 9.1 11.9 9.1 10 C9.1 8.1 7.9 6.9 6 6.9 M3.8 7.8 L2 6 M8.2 7.8 L10 6 M3.8 12.2 L2 14 M8.2 12.2 L10 14",
-    0xA5: "M1.8 3 L6 9.5 L10.2 3 M6 9.5 V16 M2.8 10.7 H9.2 M2.8 13.2 H9.2",
-    0xA6: "M6 1.5 V9 M6 12.5 V20",
-    0xA7: "M9.1 4.4 C8.4 3.5 7.4 3 6.1 3 C4.3 3 3.2 3.9 3.2 5.2 C3.2 6.6 4.3 7.2 6.3 7.7 C8.4 8.2 9.4 9 9.4 10.4 C9.4 11.7 8.4 12.6 6.9 12.8 M2.9 14.6 C3.6 15.5 4.6 16 5.9 16 C7.7 16 8.8 15.1 8.8 13.8 C8.8 12.4 7.7 11.8 5.7 11.3 C3.6 10.8 2.6 10 2.6 8.6 C2.6 7.3 3.6 6.4 5.1 6.2",
-    0xA8: "M4.1 4.9 V5.2 M7.9 4.9 V5.2",
-    0xA9: [
-        ("M6 4.8 C8.6 4.8 10.7 6.9 10.7 9.5 C10.7 12.1 8.6 14.2 6 14.2 C3.4 14.2 1.3 12.1 1.3 9.5 C1.3 6.9 3.4 4.8 6 4.8", 1.0),
-        ("M7.8 7.9 C7.3 7.4 6.7 7.2 6 7.2 C4.7 7.2 3.9 8.1 3.9 9.5 C3.9 10.9 4.7 11.8 6 11.8 C6.7 11.8 7.3 11.6 7.8 11.1", 0.75),
-    ],
-    0xAB: "M5.6 7.2 L2.8 11 L5.6 14.8 M9.4 7.2 L6.6 11 L9.4 14.8",
-    0xAC: "M2 9.5 H10 V13",
-    0xAD: "M3 11 H9",
-    0xAE: [
-        ("M6 4.8 C8.6 4.8 10.7 6.9 10.7 9.5 C10.7 12.1 8.6 14.2 6 14.2 C3.4 14.2 1.3 12.1 1.3 9.5 C1.3 6.9 3.4 4.8 6 4.8", 1.0),
-        ("M4.7 12 V7 H6.3 C7.5 7 8.1 7.4 8.1 8.4 C8.1 9.3 7.5 9.8 6.3 9.8 H4.7 M6.6 9.8 L8.2 12", 0.75),
-    ],
-    0xAF: "M3 3.6 H9",
-    0xB0: "M6 3 C4.7 3 4 3.8 4 5 C4 6.2 4.7 7 6 7 C7.3 7 8 6.2 8 5 C8 3.8 7.3 3 6 3",
-    0xB1: "M6 5.5 V12.5 M2.2 9 H9.8 M2.2 15.5 H9.8",
-    0xB4: "M5.2 5.3 L7.2 3.3",
-    0xB5: "M2 20 V7 M2 12.2 C2 14.7 3.3 16 5.8 16 C7.8 16 9.2 15 9.7 13.8 M10 7 V16",
-    0xB6: "M9.4 3 H5.2 C3.3 3 2.2 4.1 2.2 5.9 C2.2 7.7 3.3 8.8 5.2 8.8 H6.4 M6.4 3 V16 M9.4 3 V16",
-    0xB7: "M6 9.5 V10.5",
-    0xB8: "M6 16 C6 17.2 7.8 17.2 7.8 18.4 C7.8 19.4 6.8 20 5.2 20",
-    0xBB: "M2.6 7.2 L5.4 11 L2.6 14.8 M6.4 7.2 L9.2 11 L6.4 14.8",
-    0xBF: "M6 3 V4 M9.5 14 C8.7 15.3 7.5 16 5.8 16 C3.4 16 2 14.8 2 13 C2 11.2 3 10.3 4.6 9.3 C5.6 8.7 6 8 6 7",
-    0xC6: "M10.5 3 H5.8 V16 H10.5 M5.8 9.3 H9.8 M5.8 3 L1 16 M2.7 11.5 H5.8",
-    0xD0: "M2 16 V3 H5.6 C8.7 3 10 5.1 10 9.5 C10 13.9 8.7 16 5.6 16 H2 M0.9 9.5 H4.3",
-    0xD7: "M2.9 6.9 L9.1 13.1 M9.1 6.9 L2.9 13.1",
-    0xD8: "M6 3 C3.2 3 2 5.1 2 9.5 C2 13.9 3.2 16 6 16 C8.8 16 10 13.9 10 9.5 C10 5.1 8.8 3 6 3 M2.3 17.3 L9.7 1.7",
-    0xDE: "M2 3 V16 M2 5.9 H6 C8.6 5.9 9.9 7.1 9.9 9.4 C9.9 11.7 8.6 12.9 6 12.9 H2",
-    0xDF: "M2 16 V6 C2 4.1 3.2 3 5.1 3 C6.9 3 8.1 4 8.1 5.6 C8.1 6.9 7.4 7.7 6.2 8.4 C8.4 9 9.7 10.1 9.7 12 C9.7 14.4 8.3 16 6.1 16",
-    0xE6: "M6 11.5 C6 8.7 5.2 7 3.6 7 C2.1 7 1.3 8.7 1.3 11.5 C1.3 14.3 2.1 16 3.6 16 C5.2 16 6 14.3 6 11.5 M6 11.5 H10.7 C10.7 8.7 9.9 7 8.3 7 C6.8 7 6 8.7 6 11.5 C6 14.3 6.8 16 8.3 16 C9.4 16 10.1 15.5 10.6 14.6",
-    0xF0: "M6 9.4 C8.3 9.4 9.6 10.7 9.6 12.7 C9.6 14.9 8.2 16 6 16 C3.8 16 2.4 14.9 2.4 12.7 C2.4 10.7 3.8 9.4 6 9.4 M9.6 12.7 C9.6 8.6 8 5.5 4.9 3.6 M4.3 6.4 L8.5 3.8",
-    0xF7: "M2 10 H10 M6 5.8 V6.8 M6 13.2 V14.2",
-    0xF8: "M6 7 C3.3 7 2 8.7 2 11.5 C2 14.3 3.3 16 6 16 C8.7 16 10 14.3 10 11.5 C10 8.7 8.7 7 6 7 M3 17.5 L9 5.5",
-    0xFE: "M2 3 V20 M2.3 9.2 C2.7 8 4 7 6 7 C8.6 7 10 8.6 10 11.5 C10 14.4 8.6 16 6 16 C4 16 2.7 15 2.3 13.8",
-}
-
-# Combining marks as (template, cap top, cap bottom, lowercase top,
-# lowercase bottom). Cap marks live in the 0.7-2.0 band above the y=3 cap
-# line; lowercase marks live in the 4.6-5.9 band above the y=7 x-height line.
-COMBINING_MARKS = {
-    "\u0300": ("M5 {top} L7 {bottom}", 0.7, 2.0, 4.6, 5.9),
-    "\u0301": ("M5 {bottom} L7 {top}", 0.7, 2.0, 4.6, 5.9),
-    "\u0302": ("M3.8 {bottom} L6 {top} L8.2 {bottom}", 0.7, 2.0, 4.6, 5.9),
-    "\u0303": ("M3.3 {bottom} C4.2 {top} 5.1 {top} 6 {bottom} C6.9 {low} 7.8 {low} 8.7 {top}", 0.7, 1.9, 4.6, 5.8),
-    "\u0308": ("M4.1 {top} V{bottom} M7.9 {top} V{bottom}", 1.2, 1.5, 4.9, 5.2),
-    "\u030a": ("M6 {top} C4.4 {top} 4.4 {bottom} 6 {bottom} C7.6 {bottom} 7.6 {top} 6 {top}", 0.3, 2.0, 4.2, 5.9),
-    "\u0327": ("M6 16 C6 17.2 7.8 17.2 7.8 18.4 C7.8 19.4 6.8 20 5.2 20", 0, 0, 0, 0),
-}
-
-Element = tuple[str, float]
+# Stem weight in cell units; Gallant's stems are two pixels of a 12-pixel cell.
+STEM = 1.8
 
 PATH_COMMANDS = {"M", "L", "H", "V", "C", "S", "Q", "T", "Z"}
 NUMBER_PATTERN = re.compile(r"[A-Za-z]|[-+]?(?:\d+\.?\d*|\.\d+)")
@@ -216,27 +53,275 @@ def transform_path(
     return " ".join(tokens)
 
 
-# The regular digits sit on the y=16 baseline, span y=3-16, and center on
+def dot(cx: float, cy: float, r: float) -> str:
+    """A closed circle, for ball terminals and punctuation drawn with the fill pen."""
+    k = 0.5523 * r
+    n = number
+    return (
+        f"M{n(cx)} {n(cy - r)} "
+        f"C{n(cx + k)} {n(cy - r)} {n(cx + r)} {n(cy - k)} {n(cx + r)} {n(cy)} "
+        f"C{n(cx + r)} {n(cy + k)} {n(cx + k)} {n(cy + r)} {n(cx)} {n(cy + r)} "
+        f"C{n(cx - k)} {n(cy + r)} {n(cx - r)} {n(cy + k)} {n(cx - r)} {n(cy)} "
+        f"C{n(cx - r)} {n(cy - k)} {n(cx - k)} {n(cy - r)} {n(cx)} {n(cy - r)} Z"
+    )
+
+
+def bar(left: float, top: float, right: float, bottom: float) -> str:
+    """A filled rectangle, for the original's two-pixel horizontal bars."""
+    n = number
+    return f"M{n(left)} {n(top)} H{n(right)} V{n(bottom)} H{n(left)} Z"
+
+
+def turned(drawing: str) -> str:
+    """Rotate a drawing 180 degrees about the cell, for inverted punctuation."""
+    return "|".join(
+        transform_path(part, -1, -1, 12, 20.2) if part.strip() else ""
+        for part in drawing.split("|")
+    )
+
+
+# Serifed centerlines on Gallant's 12 by 22 pixel grid. Ink follows the
+# bitmap's pixel edges: capitals span y=3-17, digits and ascenders rise to
+# y=2, the x-height is y=7, and descenders reach y=22. Centerlines therefore
+# sit half a hairline inside those edges (3.4, 16.6, 7.4, 2.4, 21.6), and a
+# two-pixel stem in columns c and c+1 is centered on x=c+1.
+#
+# A drawing is "broad | hair | fill": broad strokes use the horizontal nib,
+# so verticals come out as heavy as Gallant's stems while horizontals and
+# shallow curves thin to its one-pixel joins; hairlines carry the slab
+# serifs and the thin diagonals; fills are ball terminals, dots, and the
+# two-pixel bars of digits and operators. A list of (path, weight[, pen])
+# pairs is used where a glyph needs a lighter or heavier stroke.
+MODERN_PATHS = {
+    0: "M2 3.4 H10 V16.6 H2 Z",
+    # Punctuation and operators.
+    ord("!"): f"M6 2 V12.4 | | {dot(6, 15.8, 1.05)}",
+    ord('"'): "M4 2 V7.8 M8 2 V7.8",
+    ord("#"): f"M6.9 2 L3.1 17 M10.3 2 L6.5 17 | | {bar(3.4, 6, 11.4, 7.8)} {bar(0.8, 12, 8.8, 13.8)}",
+    ord("$"): "M9.6 5.4 C9 4 7.8 3.4 6 3.4 C3.6 3.4 2.2 4.4 2.2 6.2 C2.2 8 3.6 8.8 6 9.6 C8.6 10.4 9.8 11.4 9.8 13 C9.8 14.6 8.4 15.6 6 15.6 C4 15.6 2.6 14.8 2 13.2 M6 1.8 V17.2",
+    ord("%"): [
+        ("M2.6 17 L10 2", 1.0),
+        ("M3.4 2.6 C2.3 2.6 1.6 3.4 1.6 4.7 C1.6 6 2.3 6.8 3.4 6.8 C4.5 6.8 5.2 6 5.2 4.7 C5.2 3.4 4.5 2.6 3.4 2.6", 0.75),
+        ("M8.6 12.2 C7.5 12.2 6.8 13 6.8 14.3 C6.8 15.6 7.5 16.4 8.6 16.4 C9.7 16.4 10.4 15.6 10.4 14.3 C10.4 13 9.7 12.2 8.6 12.2", 0.75),
+    ],
+    ord("&"): "M10.4 16.6 L4.4 9.4 C3.4 8.2 3 7.2 3 6 C3 4 4.2 2.6 6 2.6 C7.6 2.6 8.6 3.6 8.6 5 C8.6 6.4 7.6 7.6 5.2 9.2 C3 10.6 2 11.8 2 13.4 C2 15.4 3.4 16.6 5.6 16.6 C7.6 16.6 9 15.6 10 12.4 | M8.6 12.4 H11",
+    ord("'"): f"M6.5 3.4 C6.6 5.6 5.8 7.6 3.9 9.2 | | {dot(5.6, 3.6, 1.3)}",
+    ord("("): "M9 2 C6.6 4.6 5.8 7.2 5.8 9.5 C5.8 11.8 6.6 14.4 9 17",
+    ord(")"): "M3 2 C5.4 4.6 6.2 7.2 6.2 9.5 C6.2 11.8 5.4 14.4 3 17",
+    ord("*"): "M6 6.4 V16.6 M2.4 8.4 L9.6 14.4 M9.6 8.4 L2.4 14.4 | M4.4 6.4 H7.6 M4.4 16.6 H7.6",
+    ord("+"): f"M6 7 V17 | | {bar(1.4, 11.1, 10.6, 12.9)}",
+    ord(","): f"M6.3 15.8 C6.5 18 5.8 19.8 4 21.4 | | {dot(5.2, 15.4, 1.3)}",
+    ord("-"): f"| | {bar(1.4, 11.1, 10.6, 12.9)}",
+    ord("."): f"| | {dot(5.2, 15.4, 1.4)}",
+    ord("/"): "M2 17 L10 2",
+    ord(":"): f"| | {dot(5.2, 8.9, 1.3)} {dot(5.2, 15.4, 1.3)}",
+    ord(";"): f"M6.3 16.6 C6.5 18.6 5.8 20 4 21.4 | | {dot(5.2, 9.9, 1.3)} {dot(5.2, 16, 1.3)}",
+    ord("<"): "M10 7.4 L2.4 12 L10 16.6",
+    ord("="): f"| | {bar(1.4, 9, 10.6, 10.8)} {bar(1.4, 13.2, 10.6, 15)}",
+    ord(">"): "M2 7.4 L9.6 12 L2 16.6",
+    ord("?"): f"M2.6 5.4 C2.8 3.4 4.2 2.4 6 2.4 C8 2.4 9.2 3.6 9.2 5.4 C9.2 7.4 8.2 8.4 7 9.6 C5.6 11 5 11.6 5 12.6 | | {dot(5, 15.8, 1.05)}",
+    ord("@"): [
+        ("M10 13.6 V9 C10 6.6 8.6 5.4 6.4 5.4 C3.6 5.4 2 7.4 2 11 C2 14.6 3.6 16.6 6.6 16.6 H10.4", 0.85),
+        ("M8 9.6 C7.6 9.1 7.1 8.8 6.5 8.8 C5.2 8.8 4.4 9.8 4.4 11.2 C4.4 12.6 5.2 13.4 6.4 13.4 C7.2 13.4 7.8 13 8 12.2 M8 8.8 V13.6 H10", 0.7),
+    ],
+    ord("["): f"M6 2.4 V16.6 | | {bar(5.1, 2, 10, 3.8)} {bar(5.1, 15.2, 10, 17)}",
+    ord("\\"): "M2 2 L10 17",
+    ord("]"): f"M5 2.4 V16.6 | | {bar(1.4, 2, 5.9, 3.8)} {bar(1.4, 15.2, 5.9, 17)}",
+    ord("^"): "M2 6.6 L6 2.4 L10 6.6",
+    ord("_"): f"| | {bar(0.3, 18, 11.7, 19.8)}",
+    ord("`"): f"M5.8 7 C5.8 5.2 6.4 3.6 7.6 2.4 | | {dot(6.6, 7.2, 1.25)}",
+    ord("{"): "M9.4 2.4 H8.6 C7.2 2.4 6.6 3.2 6.6 4.6 V6.8 C6.6 8.4 6 9.3 4.4 9.6 C6 9.9 6.6 10.8 6.6 12.4 V14.4 C6.6 15.8 7.2 16.6 8.6 16.6 H9.4",
+    ord("|"): "M6 2 V22",
+    ord("}"): "M2.6 2.4 H3.4 C4.8 2.4 5.4 3.2 5.4 4.6 V6.8 C5.4 8.4 6 9.3 7.6 9.6 C6 9.9 5.4 10.8 5.4 12.4 V14.4 C5.4 15.8 4.8 16.6 3.4 16.6 H2.6",
+    ord("~"): "M1.8 14 C2.2 11.6 3.2 10.4 4.6 10.4 C6.2 10.4 6.4 13.6 7.8 13.6 C9 13.6 9.8 12.4 10.4 10.2",
+    # Digits rise a pixel above the capitals, as in the original.
+    ord("0"): "M6 2.4 C4 2.4 2.6 4.6 2.6 9.5 C2.6 14.4 4 16.6 6 16.6 C8 16.6 9.4 14.4 9.4 9.5 C9.4 4.6 8 2.4 6 2.4",
+    ord("1"): "M6 2.4 V16.6 | M6 2.4 L2.6 6.4 M2.6 16.6 H9.4",
+    ord("2"): f"M2 5.4 C2.4 3.4 4 2.4 5.8 2.4 C8 2.4 9.2 3.6 9.2 5.6 C9.2 7.6 8.2 9 6.4 10.8 L2.2 15.4 | M10.2 14 V16.2 | {bar(1.4, 15.2, 10.6, 17)}",
+    ord("3"): "M2.2 5 C2.8 3.3 4.2 2.4 6 2.4 C8.2 2.4 9.4 3.6 9.4 5.4 C9.4 7.6 8 8.8 5.6 8.8 H4.6 M5.6 8.8 C8.6 8.8 10 10.2 10 12.6 C10 15.2 8.4 16.6 6 16.6 C4.2 16.6 2.7 15.8 2 14.2",
+    ord("4"): f"M8 2 V17 | M7.6 2.4 L2 11.4 | {bar(1.6, 11, 10.8, 12.8)}",
+    ord("5"): f"M2.6 9.4 C3.4 8 4.6 7.4 6 7.4 C8.6 7.4 10 9 10 11.8 C10 14.8 8.4 16.6 5.8 16.6 C4 16.6 2.6 15.8 2 14.4 | M3.8 3 L2.8 9 | {bar(3.4, 2, 9.8, 3.8)}",
+    ord("6"): "M8.6 2.4 C5 3 2 6 2 11.2 C2 14.8 3.6 16.6 6 16.6 C8.6 16.6 10 15 10 12.4 C10 9.8 8.6 8.4 6.2 8.4 C4.4 8.4 2.9 9.4 2.2 10.8",
+    ord("7"): f"M9.8 3.4 C8 7.6 6.4 11.6 5.5 17 | M1.8 2.6 V5 | {bar(1.8, 2, 10.6, 3.8)}",
+    ord("8"): "M6 2.4 C4 2.4 2.8 3.4 2.8 5.2 C2.8 7 4 8.2 6 8.8 C8.2 9.4 9.2 10.6 9.2 12.6 C9.2 15 8 16.6 6 16.6 C4 16.6 2.8 15 2.8 12.6 C2.8 10.6 3.8 9.4 6 8.8 C8 8.2 9.2 7 9.2 5.2 C9.2 3.4 8 2.4 6 2.4",
+    ord("9"): "M6 2.4 C3.4 2.4 2 4 2 6.6 C2 9 3.4 10.4 5.8 10.4 C7.8 10.4 9.2 9.4 9.8 8 M6 2.4 C8.6 2.4 10 4.4 10 8.4 C10 13.2 7.2 16.2 2.6 16.6",
+    # Capitals.
+    ord("A"): "M6 3.4 L10.1 16.6 | M5.6 3.4 L1.9 16.6 M5.2 3.4 H6.4 M3.2 11.5 H8.8 M0.7 16.6 H3 M8.6 16.6 H11.3",
+    ord("B"): "M2 3.4 V16.6 M2 3.4 H6.4 C8.4 3.4 9.4 4.4 9.4 6.3 C9.4 8.3 8.2 9.5 6.4 9.5 H2 M6.4 9.5 C8.8 9.5 10 10.6 10 12.8 C10 15.3 8.7 16.6 6.4 16.6 H2 | M0.7 3.4 H2 M0.7 16.6 H2",
+    ord("C"): "M9.8 4.4 C9 3.7 7.9 3.4 6.4 3.4 C3.4 3.4 2 5.6 2 10 C2 14.4 3.4 16.6 6.2 16.6 C8 16.6 9.2 15.9 10.2 14.6 | M10.2 3.6 V6.2",
+    ord("D"): "M2 3.4 V16.6 M2 3.4 H5.4 C8.6 3.4 10 5.6 10 10 C10 14.4 8.6 16.6 5.4 16.6 H2 | M0.7 3.4 H2 M0.7 16.6 H2",
+    ord("E"): "M3 3.4 V16.6 | M1.4 3.4 H9.6 V5.8 M3 9.5 H8.6 M8.6 8.3 V10.7 M1.4 16.6 H10.6 V14.2",
+    ord("F"): "M3 3.4 V16.6 | M1.4 3.4 H9.6 V5.8 M3 9.5 H8.6 M8.6 8.3 V10.7 M1.4 16.6 H4.6",
+    ord("G"): "M9.8 4.4 C9 3.7 7.9 3.4 6.4 3.4 C3.4 3.4 2 5.6 2 10 C2 14.4 3.4 16.6 6.4 16.6 C8 16.6 9.2 16.2 10 15.6 V11.5 | M10.2 3.6 V6.2 M7.2 11.5 H11.3",
+    ord("H"): "M2 3.4 V16.6 M10 3.4 V16.6 | M0.7 3.4 H3.3 M8.7 3.4 H11.3 M0.7 16.6 H3.3 M8.7 16.6 H11.3 M2 9.5 H10",
+    ord("I"): "M6 3.4 V16.6 | M3.4 3.4 H8.6 M3.4 16.6 H8.6",
+    ord("J"): f"M6 3.4 V18.4 C6 20.4 5.2 21.4 3.8 21.4 | M3.4 3.4 H8.6 | {dot(3.2, 20.6, 1)}",
+    ord("K"): "M2 3.4 V16.6 M4.2 9.6 L10.2 16.6 | M9 3.4 L2.6 10.6 M0.7 3.4 H3.3 M7.6 3.4 H10.6 M0.7 16.6 H3.3 M8.4 16.6 H11.3",
+    ord("L"): "M3 3.4 V16.6 | M1.4 3.4 H4.6 M1.4 16.6 H10.6 V14.2",
+    ord("M"): "M2.2 3.4 L5.8 16.4 M10 3.4 V16.6 | M1.5 3.4 V16.6 M9.8 3.4 L5.8 16.4 M0.6 3.4 H2.4 M9.6 3.4 H11.3 M0.6 16.6 H2.6 M8.7 16.6 H11.3",
+    ord("N"): "M1.9 3.4 L10.2 16.6 | M1.4 3.4 V16.6 M10.6 3.4 V16.6 M0.5 3.4 H2 M9.4 3.4 H11.5 M0.5 16.6 H2.6",
+    ord("O"): "M6 3.4 C3.4 3.4 2 5.6 2 10 C2 14.4 3.4 16.6 6 16.6 C8.6 16.6 10 14.4 10 10 C10 5.6 8.6 3.4 6 3.4",
+    ord("P"): "M3 3.4 V16.6 M3 3.4 H6.6 C8.8 3.4 10 4.6 10 6.6 C10 8.5 8.8 9.6 6.6 9.6 H3 | M1.4 3.4 H3 M1.4 16.6 H4.6",
+    ord("Q"): "M6 3.4 C3.4 3.4 2 5.6 2 10 C2 14.4 3.4 16.6 6 16.6 C8.6 16.6 10 14.4 10 10 C10 5.6 8.6 3.4 6 3.4 M5.4 16.8 C4.2 17.1 3.2 17.7 2.8 18.4 C2.55 18.95 3 19.1 3.7 18.75 C4.7 18.25 5.7 18.35 6.7 19.1 C7.9 20 9.3 19.8 10.6 18.4",
+    ord("R"): "M2 3.4 V16.6 M2 3.4 H6.4 C8.6 3.4 9.8 4.5 9.8 6.4 C9.8 8.3 8.6 9.5 6.4 9.5 H2 M5 9.8 L10.2 16.6 | M0.7 3.4 H2 M0.7 16.6 H3.3 M9.2 16.6 H11.3",
+    ord("S"): "M9.9 4.4 C9 3.7 7.8 3.4 6.3 3.4 C3.6 3.4 2.2 4.5 2.2 6.4 C2.2 8.4 3.6 9.2 6 9.9 C8.6 10.6 10 11.6 10 13.6 C10 15.6 8.6 16.6 5.8 16.6 C4.2 16.6 2.9 16.3 1.8 15.6 | M10.2 3.6 V6.2 M1.6 13.6 V16.2",
+    ord("T"): "M6 3.4 V16.6 | M1.4 3.4 H10.6 M1.4 3.4 V5.4 M10.6 3.4 V5.4 M3.4 16.6 H8.6",
+    ord("U"): "M2 3.4 V12.4 C2 15.2 3.4 16.6 6 16.6 | M6 16.6 C8.6 16.6 10.4 15.2 10.4 12.4 V3.4 M0.7 3.4 H3.3 M8.8 3.4 H11.3",
+    ord("V"): "M2 3.4 L6 16.6 | M10.2 3.4 L6 16.6 M0.7 3.4 H3.4 M8.6 3.4 H11.3",
+    ord("W"): "M1.8 3.4 L4 16.6 M5.6 3.4 L8 16.6 | M4 16.6 L5.8 8 M8 16.6 L10.5 3.4 M0.5 3.4 H6.6 M8.6 3.4 H11.5",
+    ord("X"): "M2.2 3.4 L9.8 16.6 | M9.8 3.4 L2.2 16.6 M0.7 3.4 H3.6 M8.6 3.4 H11.3 M0.7 16.6 H3.4 M8.4 16.6 H11.3",
+    ord("Y"): "M2.2 3.4 L6 10 V16.6 | M9.8 3.4 L6 10 M0.7 3.4 H3.6 M8.6 3.4 H11.3 M3.6 16.6 H8.4",
+    ord("Z"): "M9.4 3.4 L2.6 16.6 | M2.4 3.4 H9.8 M2.4 3.4 V5.2 M2.2 16.6 H9.8 V14.6",
+    # Lowercase.
+    ord("a"): "M3.4 9.4 C3.6 8 4.6 7.4 6.2 7.4 C8 7.4 9 8.2 9 10 V15.4 C9 16.2 9.6 16.6 10.6 16.6 M9 10.8 H6.4 C4 10.8 2.6 11.8 2.6 13.7 C2.6 15.6 3.6 16.6 5.2 16.6 C6.8 16.6 8.2 15.8 9 14.4",
+    ord("b"): "M2 2.4 V16.6 M2.2 10 C2.8 8.2 4.2 7.4 6 7.4 C8.6 7.4 10 9 10 12 C10 15 8.6 16.6 6 16.6 C4.2 16.6 2.8 15.8 2.2 14.6 | M0.6 3.8 L2 2.4",
+    ord("c"): "M9 8.2 V9.8 M9.4 8.4 C8.6 7.7 7.6 7.4 6.2 7.4 C3.6 7.4 2 9 2 12 C2 15 3.6 16.6 6.2 16.6 C7.6 16.6 8.7 16 9.6 14.8",
+    ord("d"): "M10 2.4 V16.6 M9.8 10 C9.2 8.2 7.8 7.4 6 7.4 C3.4 7.4 2 9 2 12 C2 15 3.4 16.6 6 16.6 C7.8 16.6 9.2 15.8 9.8 14.6 | M8.4 3.8 L10 2.4 M10 16.6 H11.4",
+    ord("e"): "M2 11.6 H10 C10 9 8.6 7.4 6 7.4 C3.4 7.4 2 9 2 12 C2 15 3.6 16.6 6.4 16.6 C7.9 16.6 9 16 9.9 14.9",
+    ord("f"): f"M5 16.6 V5.6 C5 3.4 6 2.4 7.6 2.4 C8.4 2.4 9 2.6 9.4 3 | M2.8 9.4 H8.6 M2.8 16.6 H7.2 | {dot(9, 3.9, 0.95)}",
+    ord("g"): [
+        ("M5.5 7.4 C3.4 7.4 2 8.4 2 10 C2 11.6 3.4 12.6 5.5 12.6 C7.6 12.6 9 11.6 9 10 C9 8.4 7.6 7.4 5.5 7.4", 1.0),
+        ("M8.4 8.2 C9 7.8 9.8 7.5 10.6 7.4", 1.0, "hair"),
+        ("M3.4 12.2 C2.4 12.8 2 13.4 2 14.2 C2 15.2 2.8 15.8 4.2 15.8 H7.6 C9.4 15.8 10.4 16.6 10.4 18.2 C10.4 20.2 8.6 21.6 6 21.6 C3.4 21.6 1.6 20.6 1.6 19.2 C1.6 18 2.4 17.4 3.6 17.2", 1.0),
+    ],
+    ord("h"): "M3 2.4 V16.6 M3.2 9.8 C3.8 8.2 5 7.4 6.6 7.4 C8.2 7.4 9 8.4 9 10.2 V16.6 | M1.6 3.8 L3 2.4 M1.4 16.6 H4.6 M7.4 16.6 H10.6",
+    ord("i"): f"M6 7.4 V16.6 | M3.6 7.4 H6 M3.6 16.6 H8.4 | {dot(6, 4, 1.05)}",
+    ord("j"): f"M9 7.4 V18.6 C9 20.6 7.8 21.6 5.6 21.6 C4.4 21.6 3.4 21 2.9 19.6 | M6.6 7.4 H9 | {dot(9, 4, 1.05)} {dot(3, 19, 1)}",
+    ord("k"): "M2 2.4 V16.6 M4.4 10.8 L9 16.6 | M0.6 3.8 L2 2.4 M8.6 7.4 L2.6 12.6 M7 7.4 H10 M0.6 16.6 H3.4 M7.4 16.6 H10.6",
+    ord("l"): "M6 2.4 V16.6 | M3.6 2.4 H6 M3.6 16.6 H8.4",
+    ord("m"): "M2 7.4 V16.6 M2.2 9.4 C2.6 8 3.4 7.4 4.4 7.4 C5.6 7.4 6 8.2 6 9.6 V16.6 M6.2 9.4 C6.6 8 7.4 7.4 8.4 7.4 C9.6 7.4 10 8.2 10 9.6 V16.6 | M0.6 7.4 H2 M0.5 16.6 H3 M4.8 16.6 H7.2 M9 16.6 H11.5",
+    ord("n"): "M3 7.4 V16.6 M3.2 9.6 C3.8 8.1 5 7.4 6.6 7.4 C8.3 7.4 9 8.4 9 10.2 V16.6 | M1.6 8.6 L3 7.4 M1.4 16.6 H4.6 M7.4 16.6 H10.6",
+    ord("o"): "M6 7.4 C3.4 7.4 2 9 2 12 C2 15 3.4 16.6 6 16.6 C8.6 16.6 10 15 10 12 C10 9 8.6 7.4 6 7.4",
+    ord("p"): "M2 7.4 V21.6 M2.2 10 C2.8 8.2 4.2 7.4 6 7.4 C8.6 7.4 10 9 10 12 C10 15 8.6 16.6 6 16.6 C4.2 16.6 2.8 15.8 2.2 14.6 | M0.6 7.4 H2 M0.6 21.6 H3.4",
+    ord("q"): "M10 7.4 V21.6 M9.8 10 C9.2 8.2 7.8 7.4 6 7.4 C3.4 7.4 2 9 2 12 C2 15 3.4 16.6 6 16.6 C7.8 16.6 9.2 15.8 9.8 14.6 | M8.6 21.6 H11.4",
+    ord("r"): f"M3 7.4 V16.6 M3.2 9.8 C3.8 8.2 5 7.4 6.6 7.4 C7.6 7.4 8.4 7.7 9 8.2 | M1.4 7.4 H3 M1.4 16.6 H5 | {dot(8.6, 9, 1)}",
+    ord("s"): "M9.4 8.2 C8.6 7.7 7.6 7.4 6.2 7.4 C4 7.4 2.8 8.3 2.8 9.6 C2.8 11 4 11.5 6.2 12 C8.4 12.5 9.6 13.2 9.6 14.6 C9.6 15.9 8.4 16.6 6 16.6 C4.6 16.6 3.4 16.3 2.4 15.7 | M9.4 7.6 V9.6 M2.4 14 V16.2",
+    ord("t"): "M5 4 V14.4 C5 15.9 5.8 16.6 7.2 16.6 C8.4 16.6 9.4 16 10 15 | M1.6 7.4 H9.6",
+    ord("u"): "M3 7.4 V13.8 C3 15.6 4 16.6 5.6 16.6 C7.2 16.6 8.4 15.8 8.8 14.4 M9 7.4 V16.6 | M1.4 7.4 H3 M7.4 7.4 H9 M9 16.6 H10.6",
+    ord("v"): "M2 7.4 L6 16.6 | M10.2 7.4 L6 16.6 M0.6 7.4 H3.4 M8.6 7.4 H11.4",
+    ord("w"): "M2 7.4 L4 16.6 M5.6 7.4 L8 16.6 | M4 16.6 L5.8 10.8 M8 16.6 L10.4 7.4 M0.5 7.4 H7 M8.8 7.4 H11.5",
+    ord("x"): "M2.4 7.4 L9.6 16.6 | M9.4 7.4 L2.6 16.6 M0.6 7.4 H4 M8.2 7.4 H11.4 M0.6 16.6 H3.6 M8 16.6 H11.4",
+    ord("y"): f"M2 7.4 L6.1 17.2 | M10.2 7.4 L6 17.4 C5.4 19 4.6 20.4 3.2 21 M0.6 7.4 H3.4 M8.6 7.4 H11.4 | {dot(2.6, 20.8, 0.95)}",
+    ord("z"): "M9.2 7.4 L2.8 16.6 | M1.6 7.4 H9.8 M1.6 7.4 V9.4 M2 16.6 H10.2 V14.4",
+    # Latin-1 punctuation and symbols.
+    0xA1: turned(f"M6 2.4 V12.2 | | {dot(6, 15.8, 1.05)}"),
+    0xA2: "M9.4 9 C8.6 8 7.6 7.4 6.2 7.4 C3.6 7.4 2.2 9 2.2 11.8 C2.2 14.6 3.6 16.2 6.2 16.2 C7.6 16.2 8.6 15.6 9.4 14.6 M7.6 3.4 L3.4 18.8",
+    0xA3: f"M9.4 4.6 C9 3.2 8 2.4 6.6 2.4 C4.8 2.4 3.8 3.6 3.8 5.6 V13.6 C3.8 15 3.2 16 2 16.6 H10.4 V14.6 | M2 9.4 H7.4 | {bar(2, 15.4, 10.4, 17)}",
+    0xA4: "M6 7.6 C4 7.6 2.8 8.8 2.8 10.6 C2.8 12.4 4 13.6 6 13.6 C8 13.6 9.2 12.4 9.2 10.6 C9.2 8.8 8 7.6 6 7.6 | M3.6 8.2 L1.8 6.4 M8.4 8.2 L10.2 6.4 M3.6 13 L1.8 14.8 M8.4 13 L10.2 14.8",
+    0xA5: "M2.2 3.4 L6 10 V16.6 | M9.8 3.4 L6 10 M0.7 3.4 H3.6 M8.6 3.4 H11.3 M3.6 16.6 H8.4 M2.8 10.5 H9.2 M2.8 12.6 H9.2",
+    0xA6: "M6 2 V9.6 M6 13.4 V22",
+    0xA7: "M9.4 4 C8.6 3 7.6 2.4 6.2 2.4 C4.2 2.4 3 3.4 3 4.8 C3 6.2 4.2 7 6.4 7.8 C8.6 8.6 9.6 9.6 9.6 11 C9.6 12.2 8.8 13 7.4 13.4 M2.6 16 C3.4 17 4.4 17.6 5.8 17.6 C7.8 17.6 9 16.6 9 15.2 C9 13.8 7.8 13 5.6 12.2 C3.4 11.4 2.4 10.4 2.4 9 C2.4 7.8 3.2 7 4.6 6.6",
+    0xA8: f"| | {dot(4, 1.2, 0.95)} {dot(8, 1.2, 0.95)}",
+    0xA9: [
+        ("M6 3.4 C8.8 3.4 10.8 5.6 10.8 10 C10.8 14.4 8.8 16.6 6 16.6 C3.2 16.6 1.2 14.4 1.2 10 C1.2 5.6 3.2 3.4 6 3.4", 0.55),
+        ("M8.2 8 C7.8 7.2 7 6.8 6.2 6.8 C4.8 6.8 3.9 8 3.9 10 C3.9 12 4.8 13.2 6.2 13.2 C7 13.2 7.8 12.8 8.2 12", 0.75),
+    ],
+    0xAB: "M5.8 8 L2.6 12 L5.8 16 M9.6 8 L6.4 12 L9.6 16",
+    0xAC: f"M9.8 10.4 V13.4 | | {bar(1.4, 9, 10.6, 10.8)}",
+    0xAD: f"| | {bar(1.4, 11.1, 10.6, 12.9)}",
+    0xAE: [
+        ("M6 3.4 C8.8 3.4 10.8 5.6 10.8 10 C10.8 14.4 8.8 16.6 6 16.6 C3.2 16.6 1.2 14.4 1.2 10 C1.2 5.6 3.2 3.4 6 3.4", 0.55),
+        ("M4.6 13.2 V6.8 H6.6 C7.8 6.8 8.4 7.6 8.4 8.6 C8.4 9.6 7.8 10.4 6.6 10.4 H4.6 M6.6 10.4 L8.6 13.2", 0.75),
+    ],
+    0xAF: f"| | {bar(1.4, 0.4, 10.6, 2)}",
+    0xB0: [(transform_path("M6 2.4 C4.6 2.4 3.6 3.4 3.6 4.8 C3.6 6.2 4.6 7.2 6 7.2 C7.4 7.2 8.4 6.2 8.4 4.8 C8.4 3.4 7.4 2.4 6 2.4", 1, 1, -1.4, 0.6), 0.75)],
+    0xB1: f"M6 6 V13.8 | | {bar(1.4, 9, 10.6, 10.8)} {bar(1.4, 15.2, 10.6, 17)}",
+    0xB4: "M5.2 2.8 L7.4 0.9",
+    0xB5: "M3 7.4 V22 M3 13.8 C3 15.6 4 16.6 5.6 16.6 C7.2 16.6 8.4 15.8 8.8 14.4 M9 7.4 V16.6 | M1.4 7.4 H3 M7.4 7.4 H9 M9 16.6 H10.6",
+    0xB6: "M6.6 3.4 V17 M9 3.4 V17 | M3.6 3.4 H9.8 | M6.6 3 H4 C2.4 3 1.4 4.4 1.4 6.2 C1.4 8 2.4 9.4 4 9.4 H6.6 Z",
+    0xB7: f"| | {dot(6, 11.6, 1.2)}",
+    0xB8: "M6.2 16.8 V17.6 C7.6 17.8 8.2 18.4 8.2 19.4 C8.2 20.4 7.2 21.2 5.2 21",
+    0xBB: "M2.4 8 L5.6 12 L2.4 16 M6.2 8 L9.4 12 L6.2 16",
+    0xBF: turned(f"M2.6 5.4 C2.8 3.4 4.2 2.4 6 2.4 C8 2.4 9.2 3.6 9.2 5.4 C9.2 7.4 8.2 8.4 7 9.6 C5.6 11 5 11.6 5 12.6 | | {dot(5, 15.8, 1.05)}"),
+    0xC6: "M6 3.4 V16.6 | M4.4 3.4 H10.6 V5.6 M5.6 3.4 L1.8 16.6 M0.6 16.6 H3.2 M6 9.6 H9.2 M9.2 8.4 V10.8 M4.6 16.6 H11.4 V14.4 M3 11.6 H6",
+    0xD0: f"M2 3.4 V16.6 M2 3.4 H5.4 C8.6 3.4 10 5.6 10 10 C10 14.4 8.6 16.6 5.4 16.6 H2 | M0.7 3.4 H2 M0.7 16.6 H2 | {bar(0.4, 9.1, 4.6, 10.9)}",
+    0xD7: "M2.8 8.2 L9.2 15 M9.2 8.2 L2.8 15",
+    0xD8: "M6 3.4 C3.4 3.4 2 5.6 2 10 C2 14.4 3.4 16.6 6 16.6 C8.6 16.6 10 14.4 10 10 C10 5.6 8.6 3.4 6 3.4 | M2 17 L10 2.6",
+    0xDE: "M3 3.4 V16.6 M3 6.4 H6.4 C8.8 6.4 10 7.6 10 9.8 C10 12 8.8 13.2 6.4 13.2 H3 | M1.4 3.4 H4.6 M1.4 16.6 H4.6",
+    0xDF: "M3 16.6 V5.6 C3 3.6 4.2 2.4 5.8 2.4 C7.4 2.4 8.4 3.4 8.4 5 C8.4 6.6 7.4 7.4 6 8.2 V9.4 C6 10.4 7 11 8.2 11.8 C9.4 12.6 10 13.4 10 14.4 C10 15.8 9 16.6 7.4 16.6 C6.6 16.6 6 16.4 5.4 16 | M1.4 16.6 H3",
+    0xE6: [
+        ("M1.8 8.6 C2.4 7.8 3.2 7.4 4.2 7.4 C5.4 7.4 6 8.2 6 9.6 V14 C6 15.8 5.2 16.6 3.8 16.6 C2.4 16.6 1.4 15.8 1.4 14.4 C1.4 12.8 2.6 11.8 6 11.8 H10.6 C10.6 8.8 9.6 7.4 8.2 7.4 C6.8 7.4 6 8.6 6 10.8 V13 C6 15.4 7 16.6 8.4 16.6 C9.4 16.6 10.2 16.2 10.8 15.4", 0.8),
+    ],
+    0xF0: "M6 8.4 C3.4 8.4 2 10 2 12.6 C2 15.2 3.4 16.6 6 16.6 C8.6 16.6 10 15.2 10 12.4 C10 8.4 8.4 5 5 2.4 | M3.2 6.4 L8.8 3",
+    0xF7: f"| | {bar(1.4, 11.1, 10.6, 12.9)} {dot(6, 8, 1.1)} {dot(6, 16, 1.1)}",
+    0xF8: "M6 7.4 C3.4 7.4 2 9 2 12 C2 15 3.4 16.6 6 16.6 C8.6 16.6 10 15 10 12 C10 9 8.6 7.4 6 7.4 | M1.8 17 L10.2 7",
+    0xFE: "M2 2.4 V21.6 M2.2 10 C2.8 8.2 4.2 7.4 6 7.4 C8.6 7.4 10 9 10 12 C10 15 8.6 16.6 6 16.6 C4.2 16.6 2.8 15.8 2.2 14.6 | M0.6 2.4 H2 M0.6 21.6 H3.4",
+}
+
+# Bases for marked i and j, which drop their dots.
+DOTLESS = {
+    "i": "M6 7.4 V16.6 | M3.6 7.4 H6 M3.6 16.6 H8.4",
+    "j": f"M9 7.4 V18.6 C9 20.6 7.8 21.6 5.6 21.6 C4.4 21.6 3.4 21 2.9 19.6 | M6.6 7.4 H9 | {dot(3, 19, 1)}",
+}
+
+# Combining marks as (template, cap top, cap bottom, lowercase top,
+# lowercase bottom), where a template is a drawing to format or a function
+# of the mark's top and bottom. Cap marks live in the 0.7-2.0 band above the y=3 cap
+# line; lowercase marks live in the 4.6-5.9 band above the y=7 x-height line.
+COMBINING_MARKS = {
+    "\u0300": ("M4.6 {top} L7.4 {bottom}", 0.8, 2.0, 4.4, 5.8),
+    "\u0301": ("M4.6 {bottom} L7.4 {top}", 0.8, 2.0, 4.4, 5.8),
+    "\u0302": ("M3.4 {bottom} L6 {top} L8.6 {bottom}", 0.8, 2.0, 4.4, 5.8),
+    "\u0303": ("M3.2 {bottom} C3.6 {top} 4.4 {top} 6 {mid} C7.6 {low} 8.4 {low} 8.8 {top}", 0.8, 2.0, 4.4, 5.8),
+    "\u0308": (lambda top, bottom: f"| | {dot(4, (top + bottom) / 2, 0.95)} {dot(8, (top + bottom) / 2, 0.95)}", 0.8, 2.0, 4.4, 5.8),
+    "\u030a": ("| M6 {top} C4.6 {top} 4.6 {bottom} 6 {bottom} C7.4 {bottom} 7.4 {top} 6 {top}", 0.2, 2.2, 3.8, 5.8),
+    "\u0327": ("M6.2 16.8 V17.6 C7.6 17.8 8.2 18.4 8.2 19.4 C8.2 20.4 7.2 21.2 5.2 21", 0, 0, 0, 0),
+}
+
+# A drawn element is (path, weight, pen). Weight scales the pen; the pen is
+# "broad" (a flat nib held horizontally, so verticals are heavy and
+# horizontals are hairlines, like the original's 2px stems and 1px joins,
+# with flat ends cut square across the stroke),
+# "hair" (a plain monoline hairline), or "fill" (the closed path is filled).
+Element = tuple[str, float, str]
+PENS = {"broad", "hair", "fill"}
+
+# Fraction of the stem weight carried by the round hairline core of the
+# broad nib; the rest is the nib's horizontal sweep.
+HAIRLINE = 0.47
+NIB_STEPS = 17
+
+def normalize_elements(value) -> list[Element]:
+    """Expand a glyph drawing into elements.
+
+    A string is "broad strokes | hairlines | fills", where the later parts
+    are optional. A list holds (path, weight) or (path, weight, pen) items.
+    """
+    if isinstance(value, str):
+        return [
+            (part.strip(), 1.0, pen)
+            for part, pen in zip(value.split("|"), ("broad", "hair", "fill"))
+            if part.strip()
+        ]
+    elements = []
+    for item in value:
+        path, weight, pen = (*item, "broad") if len(item) == 2 else item
+        if pen not in PENS:
+            raise ValueError(f"unknown pen {pen!r}")
+        elements.append((path, weight, pen))
+    return elements
+
+
+# The regular digits sit on the y=17 baseline, span y=3-17, and center on
 # x=6. Small forms are the same drawings scaled about the baseline, with a
 # lighter absolute stroke that still reads optically heavier at their size.
-SMALL_FORM_SOURCES = {
-    **{str(digit): MODERN_PATHS[ord(str(digit))] for digit in range(10)},
-    "a": MODERN_PATHS[ord("a")],
-    "o": MODERN_PATHS[ord("o")],
-}
+def small_form_source(name: str) -> list[Element]:
+    return normalize_elements(MODERN_PATHS[ord(name)])
+
 
 SMALL_SCALE = 0.52
 SMALL_STROKE = 0.72
-SUPERSCRIPT_BASELINE = 9.4
-SUBSCRIPT_BASELINE = 19.4
+SUPERSCRIPT_BASELINE = 10.2
+SUBSCRIPT_BASELINE = 20.4
 
 FRACTION_SCALE = 0.42
 FRACTION_STROKE = 0.68
-FRACTION_SLASH = ("M3.1 16.6 L8.9 2.4", 0.85)
-NUMERATOR_BASELINE = 8.3
+FRACTION_SLASH = ("M3.1 17.4 L8.9 2.6", 0.85, "hair")
+NUMERATOR_BASELINE = 8.9
 NUMERATOR_CENTER = 3.3
 DENOMINATOR_CENTER = 8.7
 TENTH_SCALE = 0.34
+BASELINE = 17
 
 SUPERSCRIPT_DIGITS = {
     0xB9: "1",
@@ -269,23 +354,36 @@ VULGAR_FRACTIONS = {
 }
 
 
-def small_form(source: str, scale: float, center_x: float, baseline: float) -> str:
-    return transform_path(
-        SMALL_FORM_SOURCES[source],
-        scale,
-        scale,
-        center_x - 6 * scale,
-        baseline - 16 * scale,
-    )
+def small_form(
+    source: str,
+    scale: float,
+    center_x: float,
+    baseline: float,
+    weight: float,
+) -> list[Element]:
+    return [
+        (
+            transform_path(
+                path,
+                scale,
+                scale,
+                center_x - 6 * scale,
+                baseline - BASELINE * scale,
+            ),
+            element_weight * weight,
+            pen,
+        )
+        for path, element_weight, pen in small_form_source(source)
+    ]
 
 
 def fraction_elements(numerator: str, denominator: str | None) -> list[Element]:
     elements = [
-        (
-            small_form(digit, FRACTION_SCALE, NUMERATOR_CENTER, NUMERATOR_BASELINE),
-            FRACTION_STROKE,
-        )
+        element
         for digit in numerator
+        for element in small_form(
+            digit, FRACTION_SCALE, NUMERATOR_CENTER, NUMERATOR_BASELINE, FRACTION_STROKE
+        )
     ]
     elements.append(FRACTION_SLASH)
     if denominator is None:
@@ -296,44 +394,36 @@ def fraction_elements(numerator: str, denominator: str | None) -> list[Element]:
     else:
         centers = [7.0, 9.7]
         scale = TENTH_SCALE
-    elements.extend(
-        (small_form(digit, scale, center, 16), FRACTION_STROKE)
-        for digit, center in zip(denominator, centers, strict=True)
-    )
+    for digit, center in zip(denominator, centers, strict=True):
+        elements.extend(small_form(digit, scale, center, BASELINE, FRACTION_STROKE))
     return elements
 
 
 def derived_paths() -> dict[int, list[Element]]:
     derived: dict[int, list[Element]] = {}
     for codepoint, digit in SUPERSCRIPT_DIGITS.items():
-        derived[codepoint] = [
-            (small_form(digit, SMALL_SCALE, 6, SUPERSCRIPT_BASELINE), SMALL_STROKE)
-        ]
+        derived[codepoint] = small_form(
+            digit, SMALL_SCALE, 6, SUPERSCRIPT_BASELINE, SMALL_STROKE
+        )
     for codepoint, digit in SUBSCRIPT_DIGITS.items():
-        derived[codepoint] = [
-            (small_form(digit, SMALL_SCALE, 6, SUBSCRIPT_BASELINE), SMALL_STROKE)
-        ]
+        derived[codepoint] = small_form(
+            digit, SMALL_SCALE, 6, SUBSCRIPT_BASELINE, SMALL_STROKE
+        )
     for codepoint, (numerator, denominator) in VULGAR_FRACTIONS.items():
         derived[codepoint] = fraction_elements(numerator, denominator)
     derived[0x215F] = fraction_elements("1", None)
-    derived[0x2044] = [("M2.4 17.4 L9.6 1.6", 1.0)]
-    # Ordinal indicators are the lowercase letters scaled to superscript size.
-    derived[0xAA] = [
-        (small_form("a", 0.68, 6, SUPERSCRIPT_BASELINE), SMALL_STROKE)
-    ]
-    derived[0xBA] = [
-        (small_form("o", 0.68, 6, SUPERSCRIPT_BASELINE), SMALL_STROKE)
-    ]
+    derived[0x2044] = [("M2.4 18.2 L9.6 1.8", 1.0, "hair")]
+    # Ordinal indicators are the lowercase letters scaled to superscript size,
+    # underlined as in the original.
+    for codepoint, letter in ((0xAA, "a"), (0xBA, "o")):
+        derived[codepoint] = [
+            *small_form(letter, 0.62, 6, 10.8, SMALL_STROKE),
+            (bar(2.4, 12.6, 9.6, 14.2), 1.0, "fill"),
+        ]
     return derived
 
 
 DERIVED_PATHS = derived_paths()
-
-
-def normalize_elements(value) -> list[Element]:
-    if isinstance(value, str):
-        return [(value, 1.0)]
-    return list(value)
 
 
 def modern_elements(codepoint: int) -> list[Element] | None:
@@ -351,25 +441,23 @@ def modern_elements(codepoint: int) -> list[Element] | None:
 
     base = MODERN_PATHS[ord(decomposition[0])]
     if decomposition[0] in "ij" and any(mark != "\u0327" for mark in decomposition[1:]):
-        base = "M6 7 V16" if decomposition[0] == "i" else (
-            "M7 7 V17 C7 19 6 20 4.2 20 C3.4 20 2.7 19.8 2 19.4"
-        )
+        base = DOTLESS[decomposition[0]]
     uppercase = decomposition[0].isupper()
     elements = normalize_elements(base)
     for mark in decomposition[1:]:
         template, cap_top, cap_bottom, lower_top, lower_bottom = COMBINING_MARKS[mark]
         top = cap_top if uppercase else lower_top
         bottom = cap_bottom if uppercase else lower_bottom
-        elements.append(
-            (
-                template.format(
-                    top=number(top),
-                    bottom=number(bottom),
-                    low=number(bottom + 0.45),
-                ),
-                1.0,
+        if callable(template):
+            drawing = template(top, bottom)
+        else:
+            drawing = template.format(
+                top=number(top),
+                bottom=number(bottom),
+                low=number(bottom + 0.45),
+                mid=number((top + bottom) / 2),
             )
-        )
+        elements.extend(normalize_elements(drawing))
     return elements
 
 
@@ -391,21 +479,53 @@ def parse_source() -> dict[int, tuple[str, ...]]:
     return glyphs
 
 
-def render_design(magick: str, elements: list[Element], stroke_width: float) -> bytes:
-    path_elements = "".join(
-        f'<path d="{path}" stroke-width="{number(stroke_width * width)}"/>'
-        for path, width in elements
+def design_svg(elements: list[Element], stroke_width: float, color: str = "black") -> str:
+    """Draw elements as SVG markup in the 12 by 22 cell."""
+    hair = stroke_width * HAIRLINE
+    nib = stroke_width - hair
+    parts = []
+    for path, weight, pen in elements:
+        if pen == "fill":
+            parts.append(f'<path d="{path}" fill="{color}" stroke="none"/>')
+            continue
+        width = number(hair * weight)
+        if pen == "hair":
+            parts.append(f'<path d="{path}" stroke-width="{width}"/>')
+            continue
+        # The broad nib is swept as a row of hairline copies spanning it.
+        for step in range(NIB_STEPS):
+            offset = (step / (NIB_STEPS - 1) - 0.5) * nib * weight
+            parts.append(
+                f'<path d="{path}" stroke-width="{width}" stroke-linecap="butt" '
+                f'transform="translate({number(offset)} 0)"/>'
+            )
+    return (
+        f'<g stroke="{color}" stroke-linecap="square" stroke-linejoin="round" '
+        f'fill="none">{"".join(parts)}</g>'
     )
+
+
+def render_design(
+    rsvg: str,
+    magick: str,
+    elements: list[Element],
+    stroke_width: float,
+) -> bytes:
     svg = (
         '<svg xmlns="http://www.w3.org/2000/svg" width="192" height="352" '
         'viewBox="0 0 12 22">'
         '<rect width="12" height="22" fill="white"/>'
-        '<g stroke="black" stroke-linecap="square" stroke-linejoin="round" '
-        f'fill="none">{path_elements}</g></svg>'
+        f"{design_svg(elements, stroke_width)}</svg>"
     )
-    return subprocess.run(
-        [magick, "svg:-", "-threshold", "50%", "pbm:-"],
+    png = subprocess.run(
+        [rsvg, "--format", "png"],
         input=svg.encode(),
+        capture_output=True,
+        check=True,
+    ).stdout
+    return subprocess.run(
+        [magick, "png:-", "-threshold", "50%", "pbm:-"],
+        input=png,
         capture_output=True,
         check=True,
     ).stdout
@@ -413,6 +533,7 @@ def render_design(magick: str, elements: list[Element], stroke_width: float) -> 
 
 def trace(
     potrace: str,
+    rsvg: str,
     magick: str,
     codepoint: int,
     rows: tuple[str, ...],
@@ -424,7 +545,7 @@ def trace(
     elements = modern_elements(codepoint)
     if elements is None:
         raise ValueError(
-            f"U+{codepoint:04X} is visible but has no designed geometric outline"
+            f"U+{codepoint:04X} is visible but has no designed vector outline"
         )
 
     result = subprocess.run(
@@ -446,7 +567,7 @@ def trace(
             "--turnpolicy",
             "minority",
         ],
-        input=render_design(magick, elements, stroke_width),
+        input=render_design(rsvg, magick, elements, stroke_width),
         capture_output=True,
         check=True,
     )
@@ -462,8 +583,9 @@ def trace(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--potrace", default="potrace", help="path to Potrace 1.16")
+    parser.add_argument("--rsvg", default="rsvg-convert", help="path to librsvg's rsvg-convert")
     parser.add_argument("--magick", default="magick", help="path to ImageMagick")
-    parser.add_argument("--stroke-width", type=float, default=1.65)
+    parser.add_argument("--stroke-width", type=float, default=STEM)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
     output = args.output if args.output.is_absolute() else ROOT / args.output
@@ -477,6 +599,7 @@ def main() -> None:
     paths = {
         f"{codepoint:04X}": trace(
             args.potrace,
+            args.rsvg,
             args.magick,
             codepoint,
             rows,
@@ -488,9 +611,10 @@ def main() -> None:
         "format": 1,
         "tracer": version,
         "settings": {
-            "construction": "purpose-built geometric centerlines and derived small forms",
+            "construction": "serifed centerlines drawn with a horizontal broad nib",
             "supersample": 16,
             "stroke_width": args.stroke_width,
+            "hairline": HAIRLINE,
             "unit": 4,
             "alphamax": 0.8,
             "opttolerance": 0.15,

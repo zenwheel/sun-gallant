@@ -3,7 +3,7 @@
 Independent, open-source outline revivals of the 12×22 console font seen on Sun workstations.
 
 - **Sun Gallant Regular** preserves the original 12×22 design exactly.
-- **Sun Gallant Vector** is a from-scratch geometric redraw for contemporary terminal and editor sizes. It uses smooth curves, consistent strokes, flat terminals, and conventional serif-mono forms.
+- **Sun Gallant Vector** is a smooth redraw for contemporary terminal and editor sizes. It follows the bitmap's letterforms closely: slab serifs, heavy stems with hairline joins and thin diagonals, ball terminals, and the original's bold punctuation.
 
 Both are ordinary outline-only TrueType fonts. There are no embedded bitmap strikes.
 
@@ -83,18 +83,18 @@ The builder:
 
 1. validates every glyph and the declared character coverage;
 2. builds the original face from compact pixel-boundary contours;
-3. builds the geometric face from the pinned SVG paths in `sources/vector_paths.json`;
+3. builds the vector face from the pinned SVG paths in `sources/vector_paths.json`;
 4. converts cubic construction curves to native TrueType quadratic curves;
 5. preserves each face's real left side bearings together with the original 17-pixel ascent, 5-pixel descent, and 12-pixel monospace advance;
 6. writes outline-only TTF files and derives WOFF2 from them.
 
-The editable geometric construction lives in `scripts/trace_vector_source.py`. Regenerating the pinned path source is optional and requires ImageMagick and Potrace 1.16:
+The editable centerline construction lives in `scripts/trace_vector_source.py`. Regenerating the pinned path source is optional and requires librsvg (`rsvg-convert`), ImageMagick, and Potrace 1.16:
 
 ```sh
 python3 scripts/trace_vector_source.py
 ```
 
-Normal builds do not require either tool.
+Normal builds do not require any of these tools.
 
 ## Coverage
 

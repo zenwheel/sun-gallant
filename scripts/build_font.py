@@ -22,8 +22,8 @@ DIST = ROOT / "dist"
 FAMILY = "Sun Gallant"
 VECTOR_FAMILY = "Sun Gallant Vector"
 STYLE = "Regular"
-VERSION = "0.1.4"
-FONT_REVISION = 0.104
+VERSION = "0.1.5"
+FONT_REVISION = 0.105
 
 WIDTH = 12
 HEIGHT = 22
@@ -341,8 +341,8 @@ def build_vector() -> tuple[Path, Path]:
             "licenseDescription": "BSD 3-Clause License",
             "licenseInfoURL": "https://opensource.org/license/bsd-3-clause",
             "description": (
-                "A geometric vector redraw of Sun Gallant for contemporary "
-                "monospace text."
+                "A serifed vector redraw of Sun Gallant that keeps the original "
+                "bitmap's slab serifs and stroke contrast."
             ),
         }
     )

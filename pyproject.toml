@@ -1,7 +1,7 @@
 [project]
 name = "sun-gallant"
-version = "0.1.3"
-description = "Original and geometric vector revivals of the Sun workstation console font"
+version = "0.1.5"
+description = "Original and serifed vector revivals of the Sun workstation console font"
 requires-python = ">=3.10"
 license = "BSD-3-Clause"
 

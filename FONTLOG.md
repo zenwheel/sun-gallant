@@ -1,5 +1,12 @@
 # Fontlog
 
+## 0.1.5
+
+- Redrew `Sun Gallant Vector` to follow the original bitmap instead of a sans-serif skeleton: slab serifs on capitals and lowercase stems, angled head serifs on ascenders, and beaked terminals on `C G S E F L T Z`.
+- Strokes are now drawn with a horizontal broad nib, so stems stay as heavy as the original's two-pixel verticals while horizontals, bowls' tops and bottoms, and selected diagonals (`A K M N V W X Y`) thin to its one-pixel hairlines.
+- Restored the original's ball terminals (`a c f j r y J`), round dots, teardrop comma and quotes, two-pixel bars on digits and operators, taller digits, descending `J`, and underlined ordinal indicators.
+- Broad strokes now end flat across the stroke, so diagonal legs no longer poke past their serifs.
+
 ## 0.1.4
 
 - Restored the original's swash-tailed `Q` and double-storey `g` as geometric redrawings.
